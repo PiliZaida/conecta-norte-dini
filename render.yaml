@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: conecta-norte-dini
+    runtime: python
+    plan: free
+    buildCommand: echo "Sin dependencias externas"
+    startCommand: python server.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DINI_CODES
+        sync: false
+      - key: DINI_SESSION_SECRET
+        generateValue: true
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
+      - key: DINI_HTTPS
+        value: '1'

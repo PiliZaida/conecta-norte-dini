@@ -1,0 +1,14 @@
+DINI 3.0 - IA conectada (etapa piloto)
+
+1. Subir index.html, server.py, session_text.json y render.yaml a un repositorio PRIVADO de GitHub. NO subir claves ni datos de estudiantes.
+2. Render > New > Blueprint, elegir repositorio y confirmar. También puedes crear Web Service manualmente: Python, inicio python server.py.
+3. En Render > Environment colocar OPENAI_API_KEY (clave personal de API, nunca aquí), DINI_CODES (código de acceso propio), y DINI_SESSION_SECRET (valor largo aleatorio si Render no lo genera).
+4. Esperar estado Live y abrir la URL de onrender.com. Iniciar sesión con nombre, generación y código.
+5. Revisar indicador IA conectada y conversar sobre la sesión 1. Las explicaciones se solicitan al servidor.
+
+ADVERTENCIAS: El proyecto no está publicado. La API puede generar costos. El modo gratuito de Render no incluye almacenamiento persistente garantizado: la base SQLite local puede perderse tras reinicios y despliegues. No usar para seguimiento oficial de estudiantes sin conectar base de datos externa y mejorar la identificación de usuarios; actualmente cada ingreso crea un perfil nuevo y el código es compartido. El ticket de salida todavía es piloto y no valida todas las actividades oficiales.
+
+Prueba local (solo administrador):
+macOS/Linux: DINI_CODES=PRUEBA123 OPENAI_API_KEY=... python server.py
+Windows PowerShell: $env:DINI_CODES='PRUEBA123'; $env:OPENAI_API_KEY='...'; python server.py
+Abrir http://localhost:8000
