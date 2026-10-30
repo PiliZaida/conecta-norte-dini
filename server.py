@@ -11,17 +11,10 @@ CODES=[c.strip() for c in os.getenv('DINI_CODES','').split(',') if c.strip()]
 API=os.getenv('GEMINI_API_KEY','')
 MODEL=os.getenv('GEMINI_MODEL','gemini-2.5-flash-lite')
 SLIDES=json.loads((ROOT/'session_text.json').read_text(encoding='utf8'))
-QUESTIONS=[
- {'q':'¿Para qué sirve principalmente un sistema SCADA en una operación minera?','options':['Monitorear y supervisar variables del proceso','Sustituir todos los procedimientos de seguridad','Realizar únicamente videollamadas','Almacenar los contratos laborales'],'correct':0,'why':'SCADA permite supervisar y adquirir datos de procesos industriales.'},
- {'q':'¿Qué elemento mide una variable del proceso, como temperatura o presión?','options':['Sensor industrial','Correo electrónico','Planilla de turnos','Casco de seguridad'],'correct':0,'why':'Los sensores registran las variables que luego pueden visualizarse mediante sistemas de control.'},
- {'q':'¿Qué debe hacer un operador si detecta una anomalía que excede sus atribuciones?','options':['Aplicar el protocolo y comunicar/escalar la situación','Ignorarla porque no es de su responsabilidad','Modificar cualquier parámetro sin autorización','Apagar todos los equipos por cuenta propia'],'correct':0,'why':'Las decisiones deben seguir procedimientos y niveles de autorización definidos.'},
- {'q':'¿Cuál es una razón para incorporar tecnologías digitales en minería?','options':['Mejorar monitoreo y eficiencia operacional','Eliminar toda necesidad de formación','Garantizar que jamás habrá fallas','Evitar el trabajo coordinado'],'correct':0,'why':'La digitalización apoya el análisis, control y coordinación de operaciones.'},
- {'q':'¿Para qué sirve una interfaz HMI en una sala de control?','options':['Mostrar información del proceso al operador','Reemplazar físicamente los sensores','Transportar mineral entre equipos','Otorgar certificaciones laborales'],'correct':0,'why':'La HMI permite al operador visualizar e interactuar según permisos con el sistema.'},
- {'q':'¿Por qué un operador necesita conocer la cadena productiva minera?','options':['Para interpretar los procesos que monitorea','Para operar cualquier equipo sin capacitación','Para reemplazar a todo el personal técnico','Para evitar la comunicación entre áreas'],'correct':0,'why':'Comprender el flujo productivo ayuda a interpretar información y comunicar novedades.'}
-]
+QUESTIONS=[{'q': '¿Qué función cumple el sistema SCADA que se estudia en esta sesión?', 'options': ['Supervisar y presentar datos de procesos industriales', 'Contratar personal automáticamente', 'Transportar mineral por sí solo', 'Reemplazar los EPP'], 'correct': 0, 'why': 'Permite supervisar el proceso a través de datos de sensores, PLC y HMI.'}, {'q': 'En la cadena de información, ¿qué componente realiza la medición física?', 'options': ['El sensor', 'La HMI', 'El supervisor de turno', 'El servidor de reportes'], 'correct': 0, 'why': 'El sensor mide variables como presión, temperatura, nivel o pH.'}, {'q': 'En la cadena presentada en la sesión, ¿qué hace el PLC?', 'options': ['Procesa señales y ejecuta acciones según la lógica programada', 'Entrega los cascos de seguridad', 'Redacta el contrato del operador', 'Transporta mineral'], 'correct': 0, 'why': 'El PLC procesa señales y realiza acciones automáticas dentro de su lógica de control.'}, {'q': '¿Qué representa la HMI para quien opera desde la sala de control?', 'options': ['La interfaz donde visualiza variables y alarmas', 'Un equipo que extrae mineral', 'Un reemplazo del sensor físico', 'Un contrato de trabajo'], 'correct': 0, 'why': 'La HMI muestra el estado de los procesos y controles autorizados al operador.'}, {'q': '¿Cuál de estos roles supervisa variables, identifica alertas y documenta condiciones?', 'options': ['Operador de sala de control', 'Personal de casino', 'Conductor de transporte externo', 'Encargado de remuneraciones'], 'correct': 0, 'why': 'El operador de sala es responsable de monitorear, interpretar y registrar según su rol.'}, {'q': '¿Qué etapa de la cadena productiva monitorea el tablero de Mina Conecta Norte en esta sesión?', 'options': ['Flotación', 'Despacho de buses', 'Reclutamiento', 'Construcción de caminos'], 'correct': 0, 'why': 'La sesión sitúa el tablero en la etapa 5: flotación y variables como pH y nivel.'}]
 def db():
  DB.parent.mkdir(parents=True,exist_ok=True)
- c=sqlite3.connect(DB);c.execute('CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, generation TEXT NOT NULL, current_slide INTEGER DEFAULT 1, ticket_score INTEGER DEFAULT -1, created INTEGER NOT NULL)');c.commit();return c
+ c=sqlite3.connect(DB);c.execute('CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, generation TEXT NOT NULL, current_slide INTEGER DEFAULT 1, ticket_score INTEGER DEFAULT -1, created INTEGER NOT NULL)');c.execute('CREATE TABLE IF NOT EXISTS activities (user_id TEXT PRIMARY KEY, response1 TEXT, response2 TEXT, response3 TEXT, completed INTEGER DEFAULT 0)');c.commit();return c
 def sign(uid):
  stamp=str(int(time.time())); raw=f'{uid}.{stamp}';sig=hmac.new(SECRET.encode(),raw.encode(),'sha256').hexdigest();return f'{raw}.{sig}'
 def verify(token):
@@ -67,11 +60,19 @@ class Handler(SimpleHTTPRequestHandler):
    return self.send_json({'ok':True,'user':{'name':name,'generation':gen,'slide':1,'ticket_score':-1}},cookie=sign(uid))
   u=self.user()
   if not u:return self.send_json({'error':'Inicia sesión para continuar.'},401)
+  if path=='/api/activity':
+   answers=data.get('answers',[])
+   if not isinstance(answers,list) or len(answers)!=3 or any(not isinstance(a,str) or not 30<=len(a.strip())<=2200 for a in answers):
+    return self.send_json({'error':'Responde las tres preguntas con al menos 30 caracteres cada una.'},400)
+   conn=db();conn.execute('INSERT OR REPLACE INTO activities(user_id,response1,response2,response3,completed) VALUES(?,?,?,?,1)',(u['id'],*map(str.strip,answers)));conn.commit();conn.close()
+   return self.send_json({'ok':True,'message':'Respuestas de la actividad oficial guardadas. DINI puede ayudarte a revisarlas en el chat.'})
   if path=='/api/progress':
    n=data.get('slide');
    if not isinstance(n,int) or not 1<=n<=27:return self.send_json({'error':'Diapositiva inválida'},400)
    conn=db();conn.execute('UPDATE users SET current_slide=? WHERE id=?',(n,u['id']));conn.commit();conn.close();return self.send_json({'ok':True})
   if path=='/api/ticket':
+   conn=db();completed=conn.execute('SELECT completed FROM activities WHERE user_id=?',(u['id'],)).fetchone();conn.close()
+   if not completed or not completed[0]:return self.send_json({'error':'Antes del ticket debes completar las tres respuestas de la actividad oficial de la diapositiva 24.'},403)
    answers=data.get('answers');
    if not isinstance(answers,list) or len(answers)!=3 or not all(isinstance(x,int) and 0<=x<=3 for x in answers):return self.send_json({'error':'Responde las tres preguntas.'},400)
    attempt=int(data.get('attempt',0));idx=[(attempt*3+i)%len(QUESTIONS) for i in range(3)];correct=sum(answers[i]==QUESTIONS[j]['correct'] for i,j in enumerate(idx));score=round(correct/3*100,1)
