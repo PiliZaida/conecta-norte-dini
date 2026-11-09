@@ -1,0 +1,12 @@
+CONECTA NORTE / DINI V5 - CAMPOS FIJOS Y CHECKLIST CON ✔ / ✘
+
+Cambios respecto de V4:
+1. En Ingreso del Hito 1, turno DÍA, hora 06:00, zona Planta de Flotación - Celdas Primarias, empresa Mina Conecta Norte y cargo Operador/a de Proceso aparecen como datos FIJOS no editables. El estudiante completa nombre, RUT, fecha, aptitud y firma.
+2. En EPP, las características y riesgos impresos en el checklist aparecen como datos de referencia. Para cada EPP, el estudiante selecciona SOLO ✔ o ✘ y escribe una observación cuando corresponda. No existe una tercera opción de verificación; si no puede confirmar visualmente una especificación, debe explicarlo en observaciones.
+3. En el tablero, las cinco lecturas originales, códigos, rangos y estados están visibles como referencia fija. El cuadro de registro continúa siendo una respuesta del estudiante, sin autocompletarse.
+4. El PDF oficial conserva el escenario, sus campos preimpresos y el formato del original. La casilla DÍA queda marcada según el escenario, la hora de ingreso 06:00, y las casillas del checklist se representan como vistos buenos o X según elección.
+5. Las preguntas de DINI omiten los campos fijos y siguen registrando las respuestas en el PDF.
+
+IMPORTANTE: Esta es una actualización aún NO publicada. Para subir a GitHub, reemplazar archivos de V4 por los 17 archivos de este ZIP (incluye instrucciones) en la raíz del mismo repositorio. No modificar las claves en Render.
+
+Se preserva la prohibición del Hito 1 original de usar IA durante la evaluación. DINI debe utilizarse como preparación u orientación fuera de la evaluación individual. No introducir información médica personal real hasta validar privacidad y seguridad de almacenamiento.

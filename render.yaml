@@ -3,7 +3,7 @@ services:
     name: conecta-norte-dini
     runtime: python
     plan: free
-    buildCommand: echo "Sin dependencias de Python"
+    buildCommand: pip install -r requirements.txt
     startCommand: python server.py
     healthCheckPath: /api/health
     envVars:

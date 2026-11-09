@@ -1,5 +1,6 @@
 """DINI Hitos: backend stdlib para Render. Gemini key permanece en servidor."""
 import os, json, sqlite3, secrets, hmac, hashlib, time, re, urllib.request, urllib.error
+from pdf_generator import generate_pdf
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from http.cookies import SimpleCookie
 from pathlib import Path
@@ -11,10 +12,23 @@ SECRET=os.getenv('DINI_SESSION_SECRET') or secrets.token_hex(32)
 CODES=[x.strip() for x in os.getenv('DINI_CODES','').split(',') if x.strip()]
 GEMINI_KEY=os.getenv('GEMINI_API_KEY','')
 GEMINI_MODEL=os.getenv('GEMINI_MODEL','gemini-2.5-flash-lite')
+GENERATIONS={'D1','D2','T1','T2','V1','V2','V3','V4','V5'}
 SESSIONS=json.loads((ROOT/'modulo1_text.json').read_text(encoding='utf8'))
 # Lecturas autorizadas por apartado del Hito 1.
 MAP={0:[2,5,6],1:[2,3],2:[3,9,12],3:[11,13,9]}
 HITO1_CONTEXT='''HITO 1: ingreso a turno digital. Requerimiento 1: identificación/aptitud/firma. Requerimiento 2: EPP de flotación y observaciones. Requerimiento 3: leer cinco variables y detectar ALERTA en FW-A01 (392 L/min versus normal 280–360 L/min). Requerimiento 4: novedad inicial de turno con estado general, EPP, relevo anterior, observaciones y pendientes. El Hito 1 oficial se evalúa sin asistentes de IA, así que DINI puede explicar conceptos de las clases y orientar el estudio, pero NO debe dictar respuestas finales para copiar durante la evaluación. Datos personales y declaraciones de salud/aptitud deben responderse honestamente; no inventar datos.'''
+
+def missing_hito1(blocks):
+ """Validación de presencia por sección; no evalúa exactitud académica."""
+ first=['Nombre completo','RUT','Fecha','¿Descansaste al menos 8 horas?','¿Estás en condiciones físicas y mentales para trabajar?','¿Consumes medicamentos que puedan afectar reflejos?','¿Presentas fatiga, mareos o enfermedad?','Nombre y firma (simulada)']
+ epp=[f'e{i}' for i in range(8)]+['Nombre y firma de verificación','Hora de verificación']
+ epp += [f'eo{i}' for i in range(8) if str(blocks[1].get(f'e{i}','')).strip().startswith('✘')]
+ tablero=[x for i in range(5) for x in [f'Valor actual {i}',f'Unidad {i}',f'Estado {i}',f'¿Requiere acción y por qué? {i}']]
+ nov=['Operador/a responsable','Fecha y hora de inicio','Zona / área','1. Estado general del proceso al inicio','2. Condiciones de EPP verificadas','3. Novedades del turno anterior','4. Observaciones relevantes, alertas y acciones','5. Condiciones pendientes para el relevo','Nombre de quien registra','Hora del registro']
+ for i,required in enumerate([first,epp,tablero,nov]):
+  for field in required:
+   if not str(blocks[i].get(field,'')).strip():return i,field
+ return None
 
 def connect():
  DB.parent.mkdir(parents=True,exist_ok=True)
@@ -44,7 +58,7 @@ class Handler(SimpleHTTPRequestHandler):
  def body(self):
   try:
    n=int(self.headers.get('Content-Length','0'))
-   if not 0<n<=40000:return None
+   if not 0<n<=120000:return None
    value=json.loads(self.rfile.read(n));return value if isinstance(value,dict) else None
   except (ValueError,TypeError,json.JSONDecodeError):return None
  def user(self):
@@ -69,6 +83,7 @@ class Handler(SimpleHTTPRequestHandler):
    return self.result({'answers':blocks})
   # No servir BD ni código fuente ni claves por error.
   allowed={'/','/index.html','/pdf_hito1.js','/Hito_1_original.pdf'}
+  if re.fullmatch(r'/hito1_p[1-7]\.webp',path):allowed.add(path)
   if path not in allowed:return self.send_error(404,'Recurso no disponible')
   self.path='/index.html' if path=='/' else path
   return super().do_GET()
@@ -78,7 +93,7 @@ class Handler(SimpleHTTPRequestHandler):
   if path=='/api/login':
    name=re.sub(r'\s+',' ',str(d.get('name','')).strip())[:100]
    gen=str(d.get('generation','')).strip()[:70];code=str(d.get('code',''))[:150]
-   if len(name)<3 or len(gen)<3:return self.result({'error':'Completa nombre y generación.'},400)
+   if len(name)<3 or gen not in GENERATIONS:return self.result({'error':'Completa tu nombre y selecciona una generación válida.'},400)
    if not CODES:return self.result({'error':'DINI_CODES no configurado en Render.'},503)
    if not any(hmac.compare_digest(code,x) for x in CODES):return self.result({'error':'Clave incorrecta.'},403)
    uid=secrets.token_urlsafe(24)
@@ -87,6 +102,24 @@ class Handler(SimpleHTTPRequestHandler):
   if path=='/api/logout':return self.result({'ok':True},cookie='')
   u=self.user()
   if not u:return self.result({'error':'Inicia sesión nuevamente.'},401)
+  if path=='/api/pdf/hito1':
+   blocks=d.get('answers')
+   if not isinstance(blocks,list) or len(blocks)!=4 or any(not isinstance(b,dict) for b in blocks):return self.result({'error':'Respuestas inválidas'},400)
+   missing=missing_hito1(blocks)
+   if missing:return self.result({'error':f'Completa el cuadro {missing[0]+1} antes de descargar. Falta: {missing[1]}'},422)
+   try:
+    pdf=generate_pdf(u['name'],u['generation'],blocks)
+    filename='Hito_1_'+re.sub(r'[^a-zA-Z0-9_-]+','_',u['name'])+'.pdf'
+    self.send_response(200)
+    self.send_header('Content-Type','application/pdf')
+    self.send_header('Content-Disposition',f'attachment; filename=\"{filename}\"')
+    self.send_header('Content-Length',str(len(pdf)))
+    self.send_header('Cache-Control','no-store')
+    self.end_headers();self.wfile.write(pdf)
+   except Exception as exc:
+    print('PDF error:',type(exc).__name__,str(exc)[:180])
+    return self.result({'error':'No fue posible crear el PDF; revisa los registros del servidor.'},500)
+   return
   if path=='/api/answer':
    h=d.get('hito');p=d.get('panel');field=d.get('field');value=d.get('value')
    if h!=1 or not isinstance(p,int) or not 0<=p<4 or not isinstance(field,str) or not 0<len(field)<=150 or not isinstance(value,str) or len(value)>3000:return self.result({'error':'Campo inválido'},400)

@@ -1,0 +1,27 @@
+CONECTA NORTE DINI V7 - Avance obligatorio por cuadro y descarga protegida
+
+CAMBIOS:
+1. El estudiante solo puede pasar al siguiente cuadro cuando todos los campos obligatorios del actual tienen respuesta.
+2. Los botones numerados y el indicador de avance no permiten saltar cuadros incompletos.
+3. DINI no permite omitir preguntas obligatorias con "saltar". Sí permite omitir observaciones opcionales cuando no corresponde.
+4. Si un EPP se marca con ✘, su observación es obligatoria.
+5. La descarga del PDF se habilita al completar los cuatro cuadros. El servidor también comprueba la completitud.
+6. Se conservan las nueve generaciones, los datos fijos, la fotografía del EPP, el tablero original, las páginas de referencia, la integración con Gemini y el generador PDF.
+7. La validación comprueba que haya respuestas, NO que sean correctas; las declaraciones personales no se autocorrigen.
+
+ACTUALIZAR GITHUB (SIN BORRAR EL REPOSITORIO):
+A. Descarga este ZIP y extráelo. En GitHub, abre PiliZaida/conecta-norte-dini, rama principal/main.
+B. Para evitar conflictos con archivos ya existentes, es más seguro usar GitHub Desktop o editar/reemplazar los archivos uno por uno. En la raíz del repositorio reemplaza: index.html, pdf_hito1.js, server.py. Si tu GitHub muestra nombres TRADUCIDOS como «índice.html» o «servidor.py», revisa la configuración de Render: los nombres reales necesarios son index.html y server.py. No cambies las claves de Gemini.
+C. Confirma los cambios (Commit changes). El resto de archivos de V6 no necesita cambios; este ZIP también los incluye para una instalación desde cero.
+D. En Render abre conecta-norte-dini → Deploys. Espera el estado Live del nuevo commit. Si no se despliega solo, Manual Deploy → Deploy latest commit.
+E. Abre https://conecta-norte-dini.onrender.com y recarga con Ctrl+F5.
+
+PRUEBA OBLIGATORIA CON DATOS FICTICIOS:
+1. Inicia sesión, elige Hito 1 y trata de abrir EPP sin haber completado Ingreso: debe impedir el salto y mostrar pendientes.
+2. Completa los datos del ingreso (sin compartir datos reales). Debe habilitar el avance a EPP.
+3. Marca un EPP con ✘ sin observación: debe impedir pasar a Tablero. Añade la observación y comprueba que ahora permite pasar.
+4. Deja una fila del tablero incompleta: no debe permitir pasar a Novedad.
+5. Llena los cinco apartados de la novedad: la descarga del PDF debe habilitarse.
+6. Abre el PDF y verifica que contiene los datos correctos. No ingreses información médica real durante pruebas.
+
+IMPORTANTE: Render Free puede perder su base local al reiniciar y este prototipo todavía NO dispone de almacenamiento persistente confiable. Antes de usarlo en evaluaciones reales se necesita una base de datos duradera y controles adecuados sobre los datos personales.
