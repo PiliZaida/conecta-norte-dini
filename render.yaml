@@ -3,17 +3,15 @@ services:
     name: conecta-norte-dini
     runtime: python
     plan: free
-    buildCommand: echo "Sin dependencias externas"
+    buildCommand: echo "Sin dependencias de Python"
     startCommand: python server.py
     healthCheckPath: /api/health
     envVars:
       - key: GEMINI_API_KEY
         sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
       - key: DINI_CODES
         sync: false
       - key: DINI_SESSION_SECRET
         generateValue: true
-      - key: GEMINI_MODEL
-        value: gemini-2.5-flash-lite
-      - key: DINI_HTTPS
-        value: '1'

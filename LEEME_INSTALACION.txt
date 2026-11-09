@@ -1,0 +1,25 @@
+CONECTA NORTE | DINI HITOS V3 | GITHUB + RENDER
+
+Repositorio ya existente: https://github.com/PiliZaida/conecta-norte-dini
+Servicio existente: https://conecta-norte-dini.onrender.com
+
+1. ANTES DE SUBIR: descarga una copia del repositorio antiguo por si quieres volver atrás.
+2. En GitHub, abre PiliZaida/conecta-norte-dini (rama main). Reemplaza o agrega EN LA RAÍZ los archivos de este ZIP: index.html, pdf_hito1.js, Hito_1_original.pdf, modulo1_text.json, server.py, render.yaml.
+   No subas ningún archivo .env, GEMINI_API_KEY ni claves reales al repositorio.
+3. En Render, servicio conecta-norte-dini > Environment confirma estas variables:
+   GEMINI_API_KEY: la clave que ya tienes en Google AI Studio
+   GEMINI_MODEL: gemini-2.5-flash-lite (o un modelo compatible habilitado)
+   DINI_CODES: una o más claves separadas por coma (código de acceso; compartido por generación en esta versión)
+   DINI_SESSION_SECRET: cadena aleatoria persistente. No publicarla en GitHub.
+4. Render > Deploys > Deploy latest commit, si no despliega automáticamente.
+5. Abre /api/health y verifica gemini_configured: true y codes_configured: true.
+6. Abre la portada, inicia sesión, elige Hito 1, escribe un dato, pregunta a DINI y descarga PDF.
+
+ALCANCE Y LIMITACIONES
+- Hito 1 funciona como práctica / borrador. Los hitos 2, 3 y 4 se habilitarán cuando se agreguen sus PDF y mapeos.
+- La clave de acceso es grupal, no una contraseña personal segura; cada inicio crea una nueva cuenta. Para restaurar un avance, conserva las cookies del navegador. No usar el mismo navegador compartido sin cerrar sesión.
+- Los datos se guardan en SQLite. Render Free tiene almacenamiento efímero: los datos pueden perderse con reinicios/despliegues. Para producción, configurar un almacenamiento persistente externo antes de usarlo con estudiantes reales.
+- Las respuestas personales de aptitud para trabajar se almacenan en el servidor: limitar acceso y contar con autorización/aviso de privacidad antes de usar con estudiantes.
+- El PDF se rellena en el navegador con pdf-lib desde CDN; se requiere internet. Revisar cada PDF generado antes de subir al LMS.
+- El tutor Gemini solo enseña Hito 1 con el contenido del Módulo 1. No entrega directamente las respuestas finales de la evaluación, que en su PDF exige trabajo individual sin IA.
+- La carga de diapositivas usa extractos de texto de las sesiones oficiales. Las imágenes originales no están accesibles en el chat; las explicaciones visuales pueden requerir abrir la presentación.
