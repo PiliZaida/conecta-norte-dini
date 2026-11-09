@@ -1,0 +1,22 @@
+CONECTA NORTE · DINI V8 · AJUSTE DE IDENTIDAD VISUAL Y CHAT
+
+CAMBIOS
+1. Asistente DINI más ancho (460 px en escritorio) y mensajes más grandes.
+2. Logotipo oficial Conecta Norte entregado por la facilitadora en inicio y menú.
+3. Identidad gráfica proporcionada para Desafío Latam en navegación y chat.
+4. Marca de agua PZ, discreta, integrada a la interfaz web.
+5. Se conserva la lógica V7 de autenticación, avance obligatorio, ayuda con Gemini y generación del Hito 1 en PDF.
+
+ACTUALIZACIÓN EN GITHUB
+1. Descarga y descomprime este ZIP.
+2. Entra al repositorio PiliZaida/conecta-norte-dini, rama principal.
+3. Sube los archivos index.html, logo_conecta_norte.png y logo_desafio_latam.png a la RAÍZ del repositorio.
+4. Confirma el commit. El resto de los archivos no necesita reemplazarse para estos cambios visuales.
+5. Render debería desplegar automáticamente. Si no, en Deploys selecciona Manual Deploy → Deploy latest commit.
+6. Cuando esté Live, abre el sitio y presiona Ctrl + F5 para actualizar la caché.
+7. Comprueba que aparezcan las dos marcas y el panel DINI más grande; luego prueba una pregunta y revisa la descarga PDF.
+
+NOTAS
+- El sello PZ se incorpora a la página web, no a las páginas del PDF oficial del Hito 1.
+- No publiques secretos, claves API ni datos personales en GitHub.
+- La versión del sitio NO ha sido desplegada en Render desde este entorno.
