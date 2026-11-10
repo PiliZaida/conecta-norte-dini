@@ -82,7 +82,7 @@ class Handler(SimpleHTTPRequestHandler):
    for h,p,k,v in rows:blocks.setdefault(f'H{h}|{p}',{})[k]=v
    return self.result({'answers':blocks})
   # No servir BD ni código fuente ni claves por error.
-  allowed={'/','/index.html','/pdf_hito1.js','/Hito_1_original.pdf'}
+  allowed={'/','/index.html','/pdf_hito1.js','/Hito_1_original.pdf','/logo_conecta_norte.png','/logo_desafio_latam.png'}
   if re.fullmatch(r'/hito1_p[1-7]\.webp',path):allowed.add(path)
   if path not in allowed:return self.send_error(404,'Recurso no disponible')
   self.path='/index.html' if path=='/' else path
