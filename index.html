@@ -126,4 +126,4 @@ async function send(){
  finally{sending=false;$('send').disabled=false;$('msg').disabled=false;$('msg').focus();}
 };
 $('send').onclick=send;$('msg').onkeydown=e=>{if(e.key==='Enter')send()};$('homeBtn').onclick=home;[1,2,3,4].forEach(n=>$('h'+n+'btn').onclick=()=>pick(n));$('logout').onclick=()=>{api('/api/logout',{}).catch(()=>{});session=null;currentHito=0;chatHistory=[];window.diniWelcomed=false;$('app').classList.add('hidden');$('login').classList.remove('hidden');$('password').value='';$('chat').innerHTML=''};
-</script><script src="pdf_hito1.js"></script><script src="hito2.js"></script></body></html>
+</script><script src="pdf_hito1.js"></script><script src="hito2.js"></script><script src="hito3.js"></script></body></html>

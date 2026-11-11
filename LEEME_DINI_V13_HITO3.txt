@@ -1,0 +1,55 @@
+CONECTA NORTE · DINI V13 · HITO 3
+================================
+
+CONTENIDO
+Se conserva el Hito 1 y el Hito 2 de la V12. Se suma:
+  - Hito_3_original.pdf (11 páginas, no modificado)
+  - hito3_p1.webp hasta hito3_p11.webp (vistas de las páginas oficiales)
+  - modulo3_text.json (texto de las sesiones del ZIP, para recuperación selectiva)
+  - hito3.js (cuatro cuadros, guardado, guía, avance obligatorio y chat)
+  - pdf_hito3.py (anotación de respuestas en páginas originales, SIN ANEXOS)
+  - server.py e index.html actualizados.
+
+PUBLICACIÓN EN GITHUB
+1. Descomprimir el ZIP en el computador.
+2. Subir los archivos sueltos de la carpeta a la RAÍZ del repositorio.
+3. GitHub > Add file > Upload files > Commit changes. Sobrescribir archivos existentes.
+4. En Render, esperar a estado Live y recargar la página con Ctrl+F5.
+5. NO subir los documentos de pauta ni resolución detallada al servidor estudiantil.
+6. NO añadir la base de datos SQLite local ni archivos de prueba al repositorio.
+
+DINÁMICA DIDÁCTICA
+Cuadro 1: Ficha de inspección de bomba B-03, observación y riesgo.
+Cuadro 2: Revisar TRES errores de la descripción redactada por IA.
+Cuadro 3: Solicitud correctiva en CMMS con documentación suficiente.
+Cuadro 4: Trazabilidad verificable y evaluación REAL de compañero/a mantenedor/a.
+
+SESIONES SELECCIONADAS (disponibles en el ZIP MODULO 3_2)
+  C1: sesiones 1, 3, 4 y 5.
+  C2: sesiones 10, 13 y 16.
+  C3: sesiones 6, 7, 11, 12 y 17.
+  C4: sesiones 16, 18, 19 y 22.
+
+DATOS FIJOS DEL CASO
+VB-03 = 2,9 mm/s. Rango 0,0–3,0 mm/s; alerta operacional activa.
+Tendencia histórica 2,4→2,7→2,9 mm/s.
+10:15 inspección de bomba B-03, ruido y mancha de aceite de aprox. 10 cm.
+10:19 supervisor SUP-MCN-03 instruye documentar y solicitar correctivo.
+No se inventa diagnóstico, ticket real, acuse de mantenimiento ni evaluación de par.
+Operar hasta evaluación NO autoriza reparar un equipo en marcha.
+
+PRUEBAS REALIZADAS
+- Sintaxis JS y Python comprobada.
+- Servidor local: login, guardado, recursos publicados y validación de bloqueo PDF comprobados.
+- Una muestra simulada genera un PDF de exactamente 11 páginas sin anexos.
+
+POR VALIDAR CON UNA ENTREGA REAL
+- Calidad de colocación de las respuestas en las tablas del documento.
+- Legibilidad de respuestas largas: si un texto no cabe, el servidor pide acortarlo;
+  no lo corta silenciosamente ni agrega hojas.
+- Fluidez y pertinencia de DINI con Gemini usando la configuración ya publicada en Render.
+- Participación de un compañero/a auténtico en el cuadro de evaluación de par.
+
+ADVERTENCIA
+Guardar respuesta no equivale a verificar su exactitud técnica. Este simulador
+no certifica la ejecución real de una solicitud CMMS ni un acuse de mantenimiento.
