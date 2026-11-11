@@ -1,0 +1,63 @@
+CONECTA NORTE · DINI V12 · HITO 2
+===================================
+
+OBJETIVO
+Integrar Hito 2: Turno incidente digital a la V10 de DINI, manteniendo el Hito 1,
+los diálogos con Gemini y el PDF original de cada hito sin anexos.
+
+ARCHIVOS MODIFICADOS O NUEVOS
+- server.py: admite Hito 2, extracción rápida de las diapositivas y descarga del PDF.
+- index.html: conserva V10 y carga hito2.js.
+- pdf_hito1.js: mejora textos informativos para indicar que el Hito 1 no genera anexos.
+- hito2.js: formulario interactivo, avance obligatorio, guía de DINI, progreso y PDF.
+- pdf_hito2.py: inserta respuestas sobre Hito_2_original.pdf sin páginas añadidas.
+- Hito_2_original.pdf: PDF oficial (10 páginas).
+- hito2_p1.webp ... hito2_p8.webp: vistas originales en cada apartado.
+- modulo2_text.json: texto de las 24 sesiones, empleado por el tutor en servidor.
+
+SE CONSERVAN
+- Hito 1 y su generador V11 sin anexos.
+- DINI original, Gemini configurado en Render, la identificación por generación,
+  registro de respuestas y la imagen de la tutora.
+
+MAPA DE ESTUDIO SEGÚN EL HITO 2
+1. Clasificación: sesiones 2, 3, 4 y 5.
+2. Escalamiento: sesiones 6, 10 y 15.
+3. Bitácora: sesiones 9 y 15.
+4. Revisión del reporte IA: sesiones 13 y 16.
+ATENCIÓN: los casos numéricos de las sesiones son distintos entre sí; usar SIEMPRE
+el documento original del Hito 2 para los datos específicos y el orden de pasos.
+
+REGLAS PEDAGÓGICAS
+- La resolución modelo que suministró la facilitadora NO se publicó en la web
+  ni se envía al estudiante. Se usa como referencia de calidad para la validación.
+- El Hito 2 permite IA como apoyo para el primer borrador de un reporte; la revisión
+  y validación final corresponden al estudiante.
+- El escenario da los valores iniciales y la instrucción a las 08:51, pero NO
+  entrega mediciones posteriores. Jamás atribuir cifras simuladas a mediciones reales.
+- DINI no debe proporcionar la resolución íntegra ni alterar documentos oficiales.
+
+INSTALACIÓN GITHUB + RENDER
+1. ANTES: conserva una copia del repositorio y no borres archivos existentes.
+2. Abre el ZIP, sube a la RAÍZ de GitHub los archivos de esta versión, sobrescribiendo
+   los que tengan el mismo nombre. NO subas el propio ZIP como si fuera código.
+3. Guarda cambios (Commit changes), revisa Render hasta Live.
+4. Abre /api/health y después la web con Ctrl+F5.
+5. Prueba acceso D1, Hito 1, Hito 2, cuatro cuadros, barra de avance y PDF.
+6. En Render deben seguir GEMINI_API_KEY y GEMINI_MODEL actuales, no cambies secretos.
+
+LIMITACIONES / PRUEBAS NECESARIAS
+- El PDF usa exactamente las 10 páginas originales, sin anexos. Los cuadros del
+  original son pequeños: prueba respuestas largas y verifica legibilidad.
+- Se probó la generación PDF con respuestas sintéticas, 10 páginas, y el backend
+  local HTTP de login, guardado y bloqueo PDF incompleto. No se ha realizado aún
+  una prueba completa de calidad conversacional con Gemini en Render.
+- No se deben publicar claves, códigos reales ni datos personales en el repositorio.
+- La BD de SQLite creada en disco local de Render puede perderse si la instancia
+  es efímera. No tratarla como almacenamiento durable de producción.
+- Para la evaluación formal, confirmar la autorización de uso de IA por los
+  encargados; el texto oficial permite crear el borrador, no entregar el texto IA
+  sin revisión.
+
+FUENTES
+HITO2.pdf y las 24 clases del MODULO 2 proporcionados por la facilitadora.
