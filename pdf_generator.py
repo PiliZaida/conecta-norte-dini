@@ -116,45 +116,8 @@ def generate_pdf(name,generation,blocks):
         put(5,203,y,d.get(LABELS[3][3+i]),306,h,9)
     put(5,202,736,d.get('Nombre de quien registra'),307,19,8)
     put(6,224,87,d.get('Hora del registro'),275,23,8)
-    # Anexo: respuestas sin recortar, conservando los nueve folios de la evaluación.
-    annex=[]
-    def addline(text,size=10,color=COL,indent=0):
-        annex.append((safe(text),size,color,indent))
-    addline('ANEXO DE RESPUESTAS COMPLETAS - HITO 1',16,BLUE)
-    addline('Estudiante: '+safe(name)+' | Generación: '+safe(generation),10)
-    addline('Las páginas 1 a 9 son el hito oficial. Este anexo conserva las respuestas íntegras',9)
-    addline('cuando un campo de la plantilla original tiene espacio limitado.',9)
-    for sec,(block,title) in enumerate(zip([a,b,c,d],['1. INGRESO A TURNO','2. CHECKLIST EPP','3. LECTURA DEL TABLERO','4. NOVEDAD DE TURNO'])):
-        addline('',8)
-        addline(title,12,BLUE)
-        if sec==0:
-            for title,value in [('Turno','Día 06:00-18:00'),('Hora de ingreso','06:00'),('Zona asignada','Planta de Flotación - Celdas Primarias'),('Empresa / Área','Mina Conecta Norte'),('Cargo / Rol','Operador/a de Proceso')]:
-                addline(title+': '+value,9)
-        if sec==1:
-            for i,element in enumerate(LABELS[1][:8]):
-                addline(f'{i+1}. {element}: {block.get("e"+str(i),"Pendiente")}',9)
-                if block.get('eo'+str(i)):addline('Observación: '+block['eo'+str(i)],9)
-            for label in LABELS[1][8:]:
-                if block.get(label):addline(label+': '+block[label],9)
-        elif sec==2:
-            for i,element in enumerate(LABELS[2]):
-                addline(element,9,BLUE)
-                addline(f'Valor: {block.get("Valor actual "+str(i),"pendiente")} {block.get("Unidad "+str(i),"")} | Estado: {block.get("Estado "+str(i),"pendiente")}',9)
-                addline('Acción / justificación: '+str(block.get('¿Requiere acción y por qué? '+str(i),'Pendiente')),9)
-        else:
-            for label in LABELS[sec]:
-                if block.get(label):
-                    addline(label+':',9,BLUE)
-                    addline(block[label],9)
-    pg=doc.new_page(width=595,height=842);y=49
-    for val,size,color,indent in annex:
-        if not val:y+=7;continue
-        lines=wrap(val,520-indent,size)
-        for line in lines:
-            if y+size+6>798:
-                pg=doc.new_page(width=595,height=842);y=49
-            pg.insert_text((39+indent,y+size),line,fontname='hebo' if size>=12 else 'helv',fontsize=size,color=color)
-            y+=size+5
+    # Entregar exclusivamente las nueve páginas del documento oficial.
+    # Los datos siguen guardados en la plataforma. No se crean anexos.
     doc.set_metadata({'title':'Hito 1 - '+safe(name),'subject':'Documento de trabajo completado por estudiante'})
     result=doc.tobytes(garbage=3,deflate=True)
     doc.close()
