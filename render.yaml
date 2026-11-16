@@ -10,7 +10,7 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
-        value: gemini-2.5-flash-lite
+        sync: false
       - key: DINI_CODES
         sync: false
       - key: DINI_SESSION_SECRET

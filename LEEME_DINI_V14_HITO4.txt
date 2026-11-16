@@ -1,0 +1,32 @@
+CONECTA NORTE · DINI V14 · HITO 4
+================================
+Esta versión parte de la V13 (hitos 1, 2 y 3) e incorpora el Hito 4.
+
+INSTALACIÓN
+1. Descargar y descomprimir el ZIP.
+2. Subir TODOS los archivos contenidos a la raíz del repositorio GitHub conecta-norte-dini, reemplazando los existentes (no subir una carpeta contenedora).
+3. Guardar con Commit changes. Verificar estado Live en Render.
+4. No modificar las variables y claves de API que actualmente funcionan; el render.yaml evita fijar un modelo antiguo.
+5. Abrir la web y presionar Ctrl+F5. Iniciar sesión con un usuario de prueba.
+
+HITO 4
+- 7 apartados de trabajo: apertura, alertas simultáneas, inspección CT-01, jefatura, revisión IA, cierre/ticket/trazabilidad, preparación de presentación.
+- 12 páginas del documento oficial original; no se agregan anexos.
+- PDF descargable al completar los campos de los siete apartados.
+- Secciones de estudio del módulo 4 seleccionadas por apartado y recuperadas localmente para DINI.
+- El esquema para la presentación oral se guarda en la plataforma, pero la presentación de 5 minutos se realiza ante el curso, NO queda validada por este sitio.
+- Para números de ticket, instrucciones del supervisor, estados de cierre y medidas no provistas en el caso, debe escribirse "No informado / pendiente de verificar" cuando corresponda. No inventar datos.
+- Los ítems de trazabilidad pueden quedar "Pendiente / no verificable". Completar una casilla no significa lograr el criterio técnico de la rúbrica.
+
+PRUEBAS LOCALES REALIZADAS
+- Sintaxis Python compilada y JavaScript validado con node --check.
+- Servidor /api/health 200; archivos públicos Hito 4 200; datos del módulo 4 no expuestos (404).
+- PDF de Hito 4 de 12 páginas generado con datos ficticios de prueba, sin anexos.
+
+PENDIENTE DE VALIDAR EN RENDER
+- Guardado y recuperación con un usuario real de prueba.
+- Diálogo DINI vía Gemini en el Hito 4 (necesita clave real configurada en Render).
+- Que todas las respuestas reales sean legibles en cada casilla del PDF oficial. Las respuestas muy largas generan aviso para resumir, en vez de quedar recortadas.
+- Trabajo y presentación de los estudiantes, rubricado por docente.
+
+IMPORTANTE: NO incluyas soluciones/pautas del docente en archivos públicos. V14 no incluye solucionario de Hito 4.
